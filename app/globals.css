@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+:root {
+  height: 100%;
+}
+
+@layer base {
+  :root {
+    --face-blue: #4776e7;
+    --left-bg: #0d0f13;
+    --right-bg: #d6d9e2;
+    --border-color: #dddee0;
+    --text-grey: #989898;
+    --grey: #878b8b;
+
+    --background: #b2a5bf;
+    --foreground: #0e0d0d;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --face-blue: #4776e7;
+    --left-bg: #0d0f13;
+    --right-bg: #07080b;
+    --border-color: #15181f;
+    --text-grey: #989898;
+    --grey: #878b8b;
+
+    --background: #0d001a;
+    --foreground: #fff;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* .box_shadow {
+  box-shadow: -4px -4px 8px 0px rgba(0, 0, 0, 0.1);
+}
+
+.dark_box_shadow {
+  box-shadow: -4px -4px 8px 0px rgba(255, 255, 255, 0.1);
+} */
+
+@layer components {
+  .ring_offset {
+    @apply ring-offset-faceBlue transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-faceBlue focus-visible:ring-offset-2;
+  }
+  .box_shadow {
+    @apply shadow-[-4px_-4px_8px_0px_rgba(0,0,0,0.1)] dark:shadow-[-4px_-4px_8px_0px_rgba(255,255,255,0.1)];
+  }
+  .box_shadow_room_card {
+    @apply shadow-[0px_0px_12px_0px_rgba(0,0,0,0.20)] dark:shadow-[0px_0px_12px_0px_rgba(217,217,217,0.20)];
+  }
+}
+
+.rdp-vhidden {
+  display: none;
+}
+
+.flag-dropdown .open {
+  background-color: transparent !important;
+}
+
+.selected-flag:hover {
+  background-color: transparent !important;
+  user-select: none !important;
+}
+
+.country {
+  user-select: none !important;
+}
+
+.country:hover {
+  background-color: #1f1e1e !important;
+}
+
+.country.highlight {
+  background-color: #1f1e1e !important;
+}
