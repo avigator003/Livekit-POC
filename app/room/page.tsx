@@ -100,7 +100,7 @@ const LivekitRoom: React.FC = () => {
       const room: any = new Room({
         publishDefaults: {
           videoCodec: "av1",
-          screenShareEncoding: new VideoPreset(1280, 720, 600_000, 7, "medium")
+          screenShareEncoding: new VideoPreset(1280, 720, 750_000, 7, "medium")
             .encoding,
         },
       });
