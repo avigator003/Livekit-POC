@@ -55,7 +55,7 @@ function CustomRoomBroadcastingModal(props: any) {
     const data: EgressData = {
       room_id: roomId,
       urls: [url],
-      customBaseUrl: "https://h360fps3.vercel.app/youtube"
+      customBaseUrl: "https://700kbps.vercel.app/youtube"
     };
     await EgressFactory.getInstance().publishEgress(data);
   };
