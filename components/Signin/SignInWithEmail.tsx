@@ -46,11 +46,7 @@ const SignInWithEmail: React.FC = () => {
   const login = async (data: any) => {
     return await AuthenticationFactory.getInstance().login(data);
   };
-   
-const setup = async(user:any)=>{
-  authencationStore.addUser(user);
-  await setupHeaderToken(authencationStore.user?.token || "");
-}
+
   const { mutate, isLoading } = useMutation(login, {
     onSuccess: (response: any) => {
       const user: WhalesUser = {
@@ -61,7 +57,8 @@ const setup = async(user:any)=>{
         email: response.email,
         profilePhoto: response.profile_photo,
       };
-      setup(user)
+      authencationStore.addUser(user);
+      setupHeaderToken();
       router.push(`/dashboard/rooms`);
       toast.success("Signed in successfully"); 
     },

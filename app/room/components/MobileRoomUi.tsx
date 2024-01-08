@@ -5,17 +5,13 @@ import RoomChat from "@/components/dashboard/room/RoomChat";
 import RoomFooter from "@/components/dashboard/room/footer/RoomFooter";
 import RoomHeader from "@/components/dashboard/room/RoomHeader";
 import RoomUsers from "@/components/dashboard/room/users/RoomUsers";
-import RoomAudioVideoRenderer from "@/components/dashboard/room/RoomAudioVideoRenderer";
 
 const MobileRoomUi: React.FC = () => {
   return (
     <div className="px-2 lg:hidden">
       <div>
         <div className="flex flex-col">
-          <div className="mb-5">
           <RoomHeader />
-          </div>
-          <RoomAudioVideoRenderer/>
         </div>
         {/* <Divider className="my-2" /> */}
         <div className="flex h-fit w-full flex-col">
@@ -24,7 +20,7 @@ const MobileRoomUi: React.FC = () => {
          <RoomFooter />
       </div>
 
-      <div className="flex-col space-y-4 lg:mr-10 lg:space-y-10 mb-20">
+      <div className="flex-col space-y-4 lg:mr-10 lg:space-y-10">
         <div className="hidden h-auto flex-col lg:flex">
           <RoomAd />
         </div>

@@ -17,16 +17,12 @@ import {
 import { cn } from "@/lib/utils";
 import { RoomFactory } from "@/repository/RoomRepository";
 import useRoomStore from "@/store/room/useRoomStore";
-import { useRemoteParticipants } from "@livekit/components-react";
 
 export default function PermissionModal(props: any) {
   const roomStore = useRoomStore();
   const { isOpen, onOpenChange, userId } = props;
-  console.log("isopen",isOpen)
-   
   const [selectedOption, setSelectedOption] = useState<string>("");
   const [isCoHost, setIsCoHost] = useState<boolean>(false);
-  const remoteParticipants =useRemoteParticipants();
 
   const optionsToPermissionsMap: any = {
     audio: {
@@ -63,35 +59,9 @@ export default function PermissionModal(props: any) {
       room_id: room_id,
     };
 
-    // console.log("sjsnjfjsnfj",body)
-    const result= await RoomFactory.getInstance().updatePermissions(room_id, body);
-        // participant?.setPermissions({
-        //         canPublish:
-        //           data.permissions.isSpeaker ||
-        //           data.permissions.isVideoOn ||
-        //           data.permissions.isPresenter,
-        //         canSubscribe: true,
-        //         canPublishData: true,
-        //       });
+    await RoomFactory.getInstance().updatePermissions(room_id, body);
     onOpenChange(false);
   };
-
-  const setUserPermission = () => {
-    remoteParticipants.forEach((participant) => {
-      // if (participant) {
-      //   if (participant?.identity === data.identity) {
-      //     participant?.setPermissions({
-      //       canPublish:
-      //         data.permissions.isSpeaker ||
-      //         data.permissions.isVideoOn ||
-      //         data.permissions.isPresenter,
-      //       canSubscribe: true,
-      //       canPublishData: true,
-      //     });
-      //   }
-      // }
-    });
-  }
 
   const handleRadioChange = (value: any) => {
     setSelectedOption(value);

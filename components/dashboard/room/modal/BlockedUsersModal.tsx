@@ -9,6 +9,7 @@ import {
   Divider,
   User,
 } from "@nextui-org/react";
+import { cn } from "@/lib/utils";
 import { RoomFactory } from "@/repository/RoomRepository";
 import useRoomStore from "@/store/room/useRoomStore";
 import { useQuery } from "@tanstack/react-query";
@@ -60,7 +61,7 @@ export default function BlockedUsersModal(props: any) {
               />
               <Divider />
               {blockedUsers?.map((participant: any) => (
-                <div className="flex justify-between">
+                <div className="flex justify-between" key={participant}>
                   <User
                     name="Jane Doe"
                     description="Product Designer"

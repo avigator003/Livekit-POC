@@ -16,19 +16,22 @@ export const useAudioVideoEnables = (): any => {
     const currentUserLoggedIn = authStore.user?.id;
 
     // Check if any speaker has the same userId as the current user
-    const currentUserSpeaker = speakers.find((speaker) => {
-      try {
-        if (speaker.metadata) {
+    const currentUserSpeaker = speakers.find(
+      (speaker) => {
+        try {
+          if(speaker.metadata)
+          {
           const parsedMetadata = JSON.parse(speaker.metadata);
           return parsedMetadata.userId === currentUserLoggedIn;
+          }
+        } catch (error) {
+          console.error("Error parsing metadata:", error);
+          return false; // Consider the speaker as not matching if parsing fails
         }
-      } catch (error) {
-        console.error("Error parsing metadata:", error);
-        return false; // Consider the speaker as not matching if parsing fails
       }
-    });
+    );
 
-    if (currentUserSpeaker && currentUserSpeaker.metadata) {
+    if (currentUserSpeaker &&currentUserSpeaker.metadata ) {
       try {
         const parsedMetadata = JSON.parse(currentUserSpeaker.metadata);
         setIsAudioEnabled(!!parsedMetadata.isSpeaker);
@@ -38,6 +41,7 @@ export const useAudioVideoEnables = (): any => {
         console.error("Error parsing metadata:", error);
       }
     }
+
   }, [authStore.user?.id, speakers]);
 
   return { isAudioEnabled, isScreeneShareEnabled, isVideoEnabled };

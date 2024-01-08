@@ -1,4 +1,3 @@
-import { stat } from "fs";
 import React from "react";
 import toast from "react-hot-toast";
 import { create } from "zustand";
@@ -22,15 +21,12 @@ interface ImagesStore {
 
   isRoomJoined: boolean;
   setIsRoomJoined: (value: boolean) => void;
-
-  isImageDeleted: boolean;
-  setIsImageDeleted: () => void;
 }
 
 const useImagesStore = create<ImagesStore>()((set) => ({
   files: [],
   message: "",
-  isRoomJoined: false,
+  isRoomJoined:false,
   fileInputRef: React.createRef<HTMLInputElement>(), // Initialize fileInputRef
   setFiles: (files) => set({ files }),
   setMessage: (message) => set({ message }),
@@ -100,10 +96,6 @@ const useImagesStore = create<ImagesStore>()((set) => ({
     });
   },
   setIsRoomJoined: (value) => set({ isRoomJoined: value }),
-
-  isImageDeleted: false,
-  setIsImageDeleted: () =>
-    set((state) => ({ isImageDeleted: !state.isImageDeleted }))
 }));
 
 export default useImagesStore;

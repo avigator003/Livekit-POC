@@ -9,26 +9,22 @@ interface AudiencesProps {
 function Audiences({ getUserProfilePicture, isHost }: AudiencesProps) {
   const audiences = useAudiences();
   const getAllAudiences = () => {
-    return audiences?.map((listener: any, index: any) => (
+    return audiences?.map((speaker: any, index: any) => (
       <div
         key={index}
-        className="flex flex-col text-gray-800 dark:text-[#D9D9D9] h-full w-full"
+        className="flex flex-col items-center text-gray-800 dark:text-[#D9D9D9]"
       >
-        <div className="ml-[0.6rem]">
-          <Avatar src={getUserProfilePicture(listener)} size="md" />
-        </div>
-        <p className="mt-1 w-16 truncate text-left text-[1.174rem]">
-          {listener.name.split(" ")[0]}
+        <Avatar src={getUserProfilePicture(speaker)} size="lg" />
+        <p className="mt-1 w-14 truncate text-center">
+          {speaker.name.split(" ")[0]}
         </p>
-        <p className="right-2 text-xs text-center">Listener</p>
+        <p className="right-2 text-xs">
+          {isHost(speaker.metadata) ? "Host" : "Speaker"}
+        </p>
       </div>
     ));
   };
-  return (
-    <div className="grid grid-cols-4 sm:grid-cols-3 md:grid-cols-4 xs::grid-cols-2 gap-5">
-      {getAllAudiences()}
-    </div>
-  );
+  return <div className="flex flex-row space-x-5">{getAllAudiences()}</div>;
 }
 
 export default Audiences;

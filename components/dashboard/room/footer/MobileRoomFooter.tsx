@@ -7,7 +7,7 @@ import {
 } from "@nextui-org/react";
 import Image from "next/image";
 import { useLocalParticipant } from "@livekit/components-react";
-import { useCurrentCoHost, useCurrentHost } from "@/hooks/room/useCurrentHost";
+import { useCurrentHost } from "@/hooks/room/useCurrentHost";
 import useCameraHandler from "@/hooks/room/room-actions/useCameraHandler";
 import useAudioHandler from "@/hooks/room/room-actions/useAudioHandler";
 import useScreenShareHandler from "@/hooks/room/room-actions/useScreenShareHandler";
@@ -33,15 +33,8 @@ import video_open_dark from "@/public/video_open_dark.svg";
 import video_open_light from "@/public/video_open_light.svg";
 import gallery_dark from "@/public/gallery_dark.svg";
 import { useTheme } from "next-themes";
+import { useSpeakers } from "@/hooks/room/useSpeakers";
 import { useAudioVideoEnables } from "@/hooks/room/useAudioVideoEnabled";
-import OpenMicIcon from "@/svgs/room/openmic";
-import OffMicIcon from "@/svgs/room/offmic";
-import useLeaveRoomHandler from "@/hooks/room/room-actions/useLeaveRoom";
-import HandraiseIcon from "@/svgs/room/handraise";
-import ScreenShareIcon from "@/svgs/room/screenshare";
-import ImageUploadIcon from "@/svgs/room/imageupload";
-import VideoOnIcon from "@/svgs/room/videoon";
-import VideoOffIcon from "@/svgs/room/videooff";
 
 interface MobileRoomFooterProps {
   handleImageUpload: () => void;
@@ -59,7 +52,6 @@ function MobileRoomFooter(props: MobileRoomFooterProps) {
   } = props;
 
   const isCurrentUserHost = useCurrentHost();
-  const isCurrentCohost = useCurrentCoHost();
   const { isCameraEnabled, isMicrophoneEnabled } = useLocalParticipant();
 
   const { handleCamera } = useCameraHandler();
@@ -67,7 +59,6 @@ function MobileRoomFooter(props: MobileRoomFooterProps) {
   const { handleScreenShare } = useScreenShareHandler();
   const { handleHandRaise } = useHandRaiseHandler();
   const { endRoom } = useEndRoomHandler();
-  const { leaveRoom } = useLeaveRoomHandler();
 
   const { theme } = useTheme();
 
@@ -88,115 +79,84 @@ function MobileRoomFooter(props: MobileRoomFooterProps) {
     isVideoEnabled,
   } = useAudioVideoEnables();
 
-  const isCurrentCoHost = useCurrentCoHost();
-
   return (
-    <div className="box_shadow dark:dark_box_shadow fixed bottom-0 left-0 z-50 col-span-12 space-x-5 flex w-full items-center justify-center rounded-t-[8px] bg-white px-2 py-2 dark:bg-[#121212] lg:hidden">
-      <div className="flex flex-row justify-center">
-        {!isCurrentUserHost && !isVideoEnabled && !isScreeneShareEnabled && (
-          <>
-            {isAudioEnabled ? (
-              <div className="cursor-pointer rounded-lg p-[0.5rem]">
-                <div
-                  className="flex flex-row justify-between border-[#FFFFFF] border-1 p-[0.5rem] rounded-full px-6"
-                  onClick={handleAudio}
-                >
-                  {isMicrophoneEnabled ? (
-                    <>
-                      <div className="mt-[0.2rem] mr-2">
-                        <OpenMicIcon size={{ width: 30, height: 30 }} />
-                      </div>
-                      <p className="text-[1.25rem] font-roboto">On</p>
-                    </>
-                  ) : (
-                    <>
-                      <div className="mt-[0.2rem] mr-2">
-                        <OffMicIcon size={{ width: 30, height: 30 }} />
-                      </div>
-                      <p className="text-[1.25rem] font-roboto">Off</p>
-                    </>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <div className="cursor-pointer rounded-lg p-[0.5rem]">
-                <div
-                  className="flex flex-row justify-between border-[#FFFFFF] border-1 p-[0.5rem] rounded-full px-6"
-                  onClick={handleHandRaise}
-                >
-                  <div className="mt-[0.2rem] mr-2">
-                    <OpenMicIcon size={{ width: 30, height: 30 }} />
-                  </div>
-                  <p className="text-[1.25rem] font-roboto">Request</p>
-                </div>
-              </div>
-            )}
-          </>
-        )}
-      </div>
-
-      {/* {!isVideoEnabled && (
-        <div className="flex flex-row justify-between border-[#FFFFFF] border-1 p-[0.5rem] rounded-full px-6 space-x-3">
+    <div className="box_shadow dark:dark_box_shadow fixed bottom-0 left-0 z-40 col-span-12 flex w-full justify-between space-x-4 rounded-t-[8px] bg-white px-2 py-2 dark:bg-[#121212] lg:hidden">
+      {(isCurrentUserHost || isScreeneShareEnabled) && (
+        <div className="cursor-pointer rounded-lg p-2 hover:bg-gray-500">
           <Image
-            src={logout}
+            src={gallery_dark}
             alt="Whalesbook Logo"
-            width={25}
-            height={25}
-            onClick={leaveRoom}
-            className="cursor-pointer"
+            width={23}
+            height={23}
+            onClick={handleImageUpload}
           />
-          <p className="text-[1.25rem] font-roboto">Leave</p>
-        </div>
-      )} */}
-
-      {isAudioEnabled && (isVideoEnabled || isScreeneShareEnabled) && (
-        <div
-          className="mt-[0.3rem] ml-[0.6rem] cursor-pointer rounded-lg p-2 hover:bg-gray-500"
-          onClick={handleAudio}
-        >
-          {isMicrophoneEnabled ? (
-            <OpenMicIcon size={{ width: 30, height: 30 }} />
-          ) : (
-            <OffMicIcon size={{ width: 30, height: 30 }} />
-          )}
         </div>
       )}
 
       {isVideoEnabled && (
-        <div
-          className="mt-[0.3rem] ml-[0.6rem] cursor-pointer rounded-lg p-2 hover:bg-gray-500"
-          onClick={handleCamera}
-        >
-          {isCameraEnabled ? (
-            <VideoOnIcon size={{ width: 30, height: 30 }} />
-          ) : (
-            <VideoOffIcon size={{ width: 30, height: 30 }} />
-          )}
+        <div className="cursor-pointer rounded-lg p-2 hover:bg-gray-500">
+          <Image
+            src={isCameraEnabled ? videoOn : videoOff}
+            alt="Whalesbook Logo"
+            className="cursor-pointer"
+            width={30}
+            height={30}
+            onClick={handleCamera}
+          />
         </div>
       )}
+
+      {isAudioEnabled && (
+        <div className="cursor-pointer rounded-lg p-2 hover:bg-gray-500">
+          <Image
+            src={isMicrophoneEnabled ? audioOn : audioOff}
+            className="cursor-pointer"
+            alt="Whalesbook Logo"
+            width={30}
+            height={30}
+            onClick={handleAudio}
+          />
+        </div>
+      )}
+
+      {!isCurrentUserHost && (
+        <div className="cursor-pointer rounded-lg p-2 hover:bg-gray-500">
+          <Image
+            src={handraiseImage}
+            alt="Whalesbook Logo"
+            className="cursor-pointer"
+            width={30}
+            height={30}
+            onClick={handleHandRaise}
+          />
+        </div>
+      )}
+
       {isScreeneShareEnabled && (
-        <div
-          className="mt-[0.1rem] ml-[0.6rem] cursor-pointer rounded-lg p-2 hover:bg-gray-500"
-          onClick={handleScreenShare}
-        >
-          <ScreenShareIcon size={{ width: 30, height: 30 }} />
+        <div className="cursor-pointer rounded-lg p-2 hover:bg-gray-500">
+          <Image
+            src={screenshareImage}
+            alt="Whalesbook Logo"
+            width={30}
+            height={30}
+            className="cursor-pointer"
+            onClick={handleScreenShare}
+          />
         </div>
       )}
 
-      {(isCurrentUserHost || isScreeneShareEnabled) && (
-        <div
-          className="mt-[0.3rem] ml-[0.6rem] cursor-pointer rounded-lg p-2 hover:bg-gray-500"
-          onClick={handleImageUpload}
-        >
-          <ImageUploadIcon size={{ width: 30, height: 30 }} />
+      {!isCurrentUserHost ? (
+        <div className="cursor-pointer rounded-lg p-2 hover:bg-gray-500">
+          <Image
+            src={logout}
+            alt="Whalesbook Logo"
+            width={30}
+            height={30}
+            className="cursor-pointer"
+            onClick={endRoom}
+          />
         </div>
-      )}
-      
-
-      {(isScreeneShareEnabled ||
-        isVideoEnabled ||
-        isCurrentUserHost ||
-        isCurrentCohost) && (
+      ) : (
         <Dropdown placement="bottom-start">
           <DropdownTrigger>
             <div className="cursor-pointer rounded-lg p-2 hover:bg-gray-500">
@@ -207,15 +167,39 @@ function MobileRoomFooter(props: MobileRoomFooterProps) {
             <DropdownItem
               onClick={() => handleHandRaisedParticipantsDialogOpenChange(true)}
               key="share"
-              className={`cursor-pointer p-2 ${
-                isCurrentUserHost || isCurrentCoHost ? "" : "hidden"
-              }`}
+              className="cursor-pointer p-2"
             >
               <div className="flex items-center gap-2">
-                <HandraiseIcon size={{ width: 30, height: 30 }} />
+                <Image
+                  src={handraiseImage}
+                  alt="Whalesbook Logo"
+                  width={30}
+                  height={30}
+                  className="cursor-pointer"
+                />
                 Raised Hand Requests
               </div>
             </DropdownItem>
+
+            <DropdownItem
+              key="profile"
+              className="cursor-pointer rounded-lg p-2 hover:bg-gray-500"
+            >
+              <div
+                className=" flex items-center gap-2"
+                onClick={() => handleBlockedUsersDialogOpenChange(true)}
+              >
+                <Image
+                  src={blocked_users}
+                  alt="Whalesbook Logo"
+                  width={30}
+                  height={30}
+                  className="cursor-pointer"
+                />
+                Blocked Users
+              </div>
+            </DropdownItem>
+
             <DropdownItem
               key="live"
               className="cursor-pointer rounded-lg p-2 hover:bg-gray-500"
@@ -223,7 +207,7 @@ function MobileRoomFooter(props: MobileRoomFooterProps) {
                 handleEgress(true);
               }}
             >
-              <div className="flex items-center gap-2">
+              <div className=" flex items-center gap-2">
                 <Image
                   src={broadcastImage}
                   alt="Boradcast"
@@ -235,19 +219,30 @@ function MobileRoomFooter(props: MobileRoomFooterProps) {
               </div>
             </DropdownItem>
 
-            <DropdownItem
-              key="logout"
-              className={`cursor-pointer p-2 ${
-                isCurrentUserHost ? "" : "hidden"
-              }`}
-            >
+            <DropdownItem key="logout" className="cursor-pointer p-2">
               <div className="flex items-center gap-2">
                 <Image
                   src={logout}
                   alt="Whalesbook Logo"
                   width={30}
                   height={30}
-                  onClick={endRoom}
+                  className="cursor-pointer"
+                />
+                Leave Room
+              </div>
+            </DropdownItem>
+            <DropdownItem key="logout" className="cursor-pointer p-2">
+              <div
+                className="flex items-center gap-2"
+                onClick={() => {
+                  endRoom();
+                }}
+              >
+                <Image
+                  src={logout}
+                  alt="Whalesbook Logo"
+                  width={30}
+                  height={30}
                   className="cursor-pointer"
                 />
                 End Room

@@ -138,7 +138,7 @@ export default function HandRaisedUsersModal(props: any) {
                   }
                 />
                 {handRaisedParticipants?.map((participant: any) => (
-                  <div>
+                  <div key={participant}>
                     <Accordion
                       selectionMode="multiple"
                       variant="splitted"

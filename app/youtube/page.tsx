@@ -24,7 +24,7 @@ function CustomRoom() {
   }, []);
 
   if (!url || !token) {
-    return <div className="error">missing required params url and token</div>;
+    return <div className="error">missing {url}  Akshat {token} required {layout} params url and token</div>;
   }
 
   return (
@@ -83,7 +83,7 @@ function CompositeTemplate({ layout: initialLayout }: CompositeTemplateProps) {
   }, [room]);
 
   useEffect(() => {
-    if (screenshareTracks.length > 0 && screenshareTracks[0].publication) {
+    if (screenshareTracks?.length > 0 && screenshareTracks[0].publication) {
       setHasScreenShare(true);
     } else {
       setHasScreenShare(false);

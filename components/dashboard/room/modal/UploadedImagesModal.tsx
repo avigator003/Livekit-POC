@@ -1,31 +1,19 @@
-import { useCurrentCoHost, useCurrentHost } from "@/hooks/room/useCurrentHost";
 import { DeleteImagesData, RoomFactory } from "@/repository/RoomRepository";
 import useImagesStore from "@/store/room/useImagesStore";
-import useRoomStore, { ImageUrl } from "@/store/room/useRoomStore";
-import useAuthenticationStore from "@/store/useAuthenticationStore";
+import useRoomStore from "@/store/room/useRoomStore";
 import { Button } from "@nextui-org/button";
 import { useMutation } from "@tanstack/react-query";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 function UploadedImagesModal() {
-  const {
-    uploadedImages,
-    room,
-    setActiveImageIndex,
-    activeImageIndex,
-  } = useRoomStore();
-  const isCohost = useCurrentCoHost();
-  const isHost = useCurrentHost();
-
+  const { uploadedImages, room } = useRoomStore();
   const {
     selectedImageIndexes,
     setSelectedImageIndex,
     selectAllImageIndexes,
-    setIsImageDeleted,
   } = useImagesStore();
 
-  const {user} = useAuthenticationStore();
   const handleCheckboxChange = (index: number) => {
     setSelectedImageIndex(index); // Pass a single-index array
   };
@@ -37,8 +25,6 @@ function UploadedImagesModal() {
 
   const { mutate, isLoading } = useMutation(deleteRoomImages, {
     onSuccess: (response: any) => {
-      setActiveImageIndex(activeImageIndex - 1);
-      setIsImageDeleted();
       toast.success("Images deleted successfully");
     },
     onError: (err) => {
@@ -48,12 +34,12 @@ function UploadedImagesModal() {
 
   const handleDeleteImages = () => {
     const selectedImageUrls = selectedImageIndexes.map(
-      (index) => uploadedImages[index].url
+      (index) => uploadedImages[index]
     );
+
     const deleteImagesData: DeleteImagesData = {
       image_urls: selectedImageUrls,
     };
-    setIsImageDeleted();
     mutate(deleteImagesData);
   };
 
@@ -75,36 +61,32 @@ function UploadedImagesModal() {
         </div>
       </div>
       <div className="grid grid-cols-4 gap-4">
-        {uploadedImages?.map((imageUrl: ImageUrl, index: number) => {
+        {uploadedImages?.map((imageUrl: string, index: number) => {
           const isChecked = selectedImageIndexes.includes(index);
           return (
-            <>
-              {(isCohost || isHost || imageUrl.userId === user?.id) && (
-                <div
-                  key={activeImageIndex}
-                  className="relative w-full aspect-w-16 aspect-h-7"
-                >
-                  <img
-                    src={imageUrl.url}
-                    className="w-full object-cover aspect-[16/9] rounded-lg"
+            <div
+              key={imageUrl}
+              className="relative w-full aspect-w-16 aspect-h-7"
+            >
+              <img
+                src={imageUrl}
+                className="w-full aspect-h-9 object-contain rounded-md"
+              />
+
+              <div className="absolute left-0 bottom-0 w-full h-full bg-black opacity-10"></div>
+
+              <div className="absolute left-0 top-0 p-1">
+                <div className="w-3/4 md:w-2/4 mx-auto mb-4">
+                  <input
+                    type="checkbox"
+                    id={`checkbox-${index}`}
+                    checked={isChecked}
+                    className="cursor-pointer"
+                    onChange={() => handleCheckboxChange(index)}
                   />
-
-                  <div className="absolute left-0 bottom-0 w-full h-full bg-black opacity-10"></div>
-
-                  <div className="absolute left-0 top-0 p-1">
-                    <div className="w-3/4 md:w-2/4 mx-auto mb-4">
-                      <input
-                        type="checkbox"
-                        id={`checkbox-${index}`}
-                        checked={isChecked}
-                        className="cursor-pointer"
-                        onChange={() => handleCheckboxChange(index)}
-                      />
-                    </div>
-                  </div>
                 </div>
-              )}
-            </>
+              </div>
+            </div>
           );
         })}
       </div>

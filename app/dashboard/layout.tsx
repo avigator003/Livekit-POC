@@ -10,7 +10,6 @@ import { useDisclosure } from "@nextui-org/react";
 import useLoginSignupStore from "@/store/useLoginSignupStore";
 import ShadowModal from "@/components/custom-ui/modal/ShadowModal";
 import ProfileInfo from "@/components/Signup/ProfileInfo";
-import useAuthenticationStore from "@/store/useAuthenticationStore";
 
 export default function DashboardLayout({
   children,
@@ -22,7 +21,6 @@ export default function DashboardLayout({
   ]);
   const { isOpen, onClose, onOpen } = useDisclosure();
   const loginSignupStore = useLoginSignupStore();
-  const authenticationStore = useAuthenticationStore();
 
   useEffect(() => {
     if (loginSignupStore.isSignUpFlow) {
@@ -36,9 +34,10 @@ export default function DashboardLayout({
   };
 
   
+
   useEffect(() => {
     const handleRefresh = () => {
-      setupHeaderToken(authenticationStore.user?.token || "");
+      setupHeaderToken();
     };
 
     window.addEventListener("beforeunload", handleRefresh);

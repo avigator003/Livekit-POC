@@ -15,7 +15,7 @@ const useUnmutedTracks = (): Track[] | null => {
 
     fetchUnmutedTracks();
   }, [cameraTracks]);
-  
+
   return unmutedTracks;
 };
 

@@ -19,11 +19,12 @@ import { useJoinRoom } from "@/hooks/room/userRoomJoin";
 
 export default function RoomCardNoThumbnail({ room }: any) {
   const router = useRouter();
-  const {  roomName, host, textThumbnail } = room;
+  const {  roomName, host } = room;
   const [isHovered, setIsHovered] = useState(false);
   const [joiningRoom, setJoiningRoom] = useState<boolean>(false);
 
   const onJoinPress = useJoinRoom(room, setJoiningRoom, router);
+
 
   return (
     <div
@@ -65,11 +66,11 @@ export default function RoomCardNoThumbnail({ room }: any) {
           )}
 
           {!joiningRoom && (
-            <div className="flex flex-1 flex-col text-center z-30 w-full">
+            <div className="flex flex-1 flex-col text-center z-30">
               <p
-                className={`overflow-hidden line-clamp-4 text-[1.2rem] text-gray-900 dark:text-white w-full`}
+                className={`overflow-hidden line-clamp-2 text-[1.2rem] text-gray-900 dark:text-white`}
               >
-                {textThumbnail}
+                {roomName}
               </p>
             </div>
           )}
@@ -86,15 +87,15 @@ export default function RoomCardNoThumbnail({ room }: any) {
           />
         </div>
 
-        <div className="flex flex-col items-start">
+        <div className="flex flex-1 flex-col items-start">
           <p
-            className={`overflow-hidden line-clamp-2 text-[0.87rem] text-gray-900 dark:text-white mb-1 w-full`}
+            className={`overflow-hidden line-clamp-2 text-[0.87rem] text-gray-900 dark:text-white mb-1`}
           >
             {" "}
             {roomName}
           </p>
           <p className="truncate text-[0.75rem] text-default-400">
-            {host.name} (HOST) • 20K Inside Room
+            {host.name} (HOST) • 20K InsIde Room
           </p>
         </div>
         <MoreVertical size={20} className="ml-auto" />

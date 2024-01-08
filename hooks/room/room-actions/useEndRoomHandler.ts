@@ -20,6 +20,11 @@ const useEndRoomHandler = (): EndRoomHandlerHook => {
     };
     await RoomFactory.getInstance().endRoom(data);
     router.push("/dashboard/rooms");
+    // const response = await EgressFactory.getInstance().stopEgress(data);
+    // response
+    //   ? toast.success("Streaming stopped")
+    //   : toast.error("Unable to stop your streaming");
+    //   router.push("/dashboard/rooms");
   }, [roomStore, router]);
 
   return {

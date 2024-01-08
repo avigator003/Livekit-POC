@@ -39,7 +39,7 @@ export default function ShadowModal(props: ShadowModalProps) {
         isOpen={isOpen}
         onClose={onClose}
         classNames={{
-          base: "shadow-xs shadow-[#7D7C7C] bg-[#000000] p-7",
+          base: "shadow-xs shadow-[#7D7C7C] bg-[#121212] p-7",
         }}
       >
         <ModalContent>

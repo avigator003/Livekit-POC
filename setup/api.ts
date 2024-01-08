@@ -15,8 +15,9 @@ export const photoApi = axios.create({
   },
 });
 
-
-export const setupHeaderToken = async(token:string) => {
+export const setupHeaderToken = () => {
+  const authenticationStore = useAuthenticationStore.getState();
+  const token = authenticationStore.user?.token;
   api.interceptors.request.use(
     (config: any) => {
       config.headers.Authorization = `Bearer ${token}`;

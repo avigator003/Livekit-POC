@@ -34,12 +34,12 @@ function RoomUsers() {
   };
 
   return (
-    <div className="mt-3 flex flex-col gap-2 lg:mt-1 lg:w-[18.75rem] sm:w-full md:w-full xs:w-full">
+    <div className="mt-3 flex flex-col gap-2 lg:mt-1">
       <div>
-        <p className="mb-3 text-black dark:text-white text-[0.875rem]">Speakers</p>
+        <p className="mb-2 text-black dark:text-white">Speakers</p>
         {speakers?.length > 0 ? (
           <ScrollArea>
-            <div className="flex space-x-10 overflow-x-auto pb-4 h-full w-full">
+            <div className="flex space-x-8 overflow-x-auto px-2 pb-4">
               <Speakers
                 getUserProfilePicture={getUserProfilePicture}
                 isHost={isHost}

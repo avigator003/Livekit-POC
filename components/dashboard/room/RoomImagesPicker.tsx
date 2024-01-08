@@ -16,7 +16,6 @@ const ImagePicker = () => {
     message,
     handleFile,
     files,
-    setFiles,
     fileInputRef,
     setFileInputRef,
     removeImage,
@@ -34,7 +33,6 @@ const ImagePicker = () => {
 
   const { mutate, isLoading } = useMutation(uploadImages, {
     onSuccess: (response: any) => {
-      setFiles([]);
       toast.success("Images Uploaded Successfully");
     },
     onError: (err) => {

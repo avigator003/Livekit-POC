@@ -21,25 +21,12 @@ import video_close_light from "@/public/video_close_light.svg";
 import video_open_dark from "@/public/video_open_dark.svg";
 import video_open_light from "@/public/video_open_light.svg";
 import gallery_dark from "@/public/gallery_dark.svg";
-import { useCurrentCoHost, useCurrentHost } from "@/hooks/room/useCurrentHost";
+import { useCurrentHost } from "@/hooks/room/useCurrentHost";
 import { useLocalParticipant } from "@livekit/components-react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import React, { useEffect } from "react";
 import { useAudioVideoEnables } from "@/hooks/room/useAudioVideoEnabled";
-import { Button } from "@nextui-org/button";
-import useRoomStore from "@/store/room/useRoomStore";
-import OpenMicIcon from "@/svgs/room/openmic";
-import OffMicIcon from "@/svgs/room/offmic";
-import ChatIcon from "@/svgs/room/chat";
-import HandraiseIcon from "@/svgs/room/handraise";
-import BlockedIcon from "@/svgs/room/blocked";
-import EgressIcon from "@/svgs/room/egress";
-import ImageUploadIcon from "@/svgs/room/imageupload";
-import ScreenShareIcon from "@/svgs/room/screenshare";
-import VideoOnIcon from "@/svgs/room/videoon";
-import VideoOffIcon from "@/svgs/room/videooff";
-import EndRoomIcon from "@/svgs/room/endroom";
 
 interface DesktopRoomFooterProps {
   handleImageUpload: () => void;
@@ -56,11 +43,9 @@ function DesktopRoomFooter(props: DesktopRoomFooterProps) {
     handleImageUpload,
   } = props;
 
-  const roomStore = useRoomStore();
   const { isCameraEnabled, isMicrophoneEnabled } = useLocalParticipant();
 
   const isCurrentUserHost = useCurrentHost();
-  const isCurrentCoHost = useCurrentCoHost();
 
   const { handleCamera } = useCameraHandler();
   const { handleAudio } = useAudioHandler();
@@ -68,168 +53,145 @@ function DesktopRoomFooter(props: DesktopRoomFooterProps) {
   const { handleHandRaise } = useHandRaiseHandler();
   const { endRoom } = useEndRoomHandler();
 
+  const { theme } = useTheme();
+
+  let isDark = theme === "dark";
+
+  let handraiseImage = isDark ? handraise_dark : handraise_light;
+  let screenshareImage = isDark ? screenshare_dark : screenshare_light;
+  let blocked_users = isDark ? blocked_users_dark : blocked_users_light;
+  let broadcastImage = isDark ? broadcast_dark : broadcast_light;
+  let audioOn = isDark ? audio_open_dark : audio_open_light;
+  let audioOff = isDark ? audio_close_dark : audio_close_light;
+  let videoOn = isDark ? video_open_dark : video_open_light;
+  let videoOff = isDark ? video_close_dark : video_close_light;
+
   const {
     isAudioEnabled,
     isScreeneShareEnabled,
     isVideoEnabled,
   } = useAudioVideoEnables();
-
-  const handleChatModal = () => {
-    roomStore.setIsChatOpen();
-  };
-
+  
   return (
-    <div className="inline-flex space-x-6 px-4 py-1 dark:bg-[#0D0F13] w-[48%] items-center justify-center">
-      {/* <div className="w-full z-40 h-[5rem] flex flex-row space-x-4 bg-white p-2  items-center justify-center"> */}
-
-      <div className="space-x-28 flex flex-row">
-        {!isCurrentUserHost && !isVideoEnabled && !isScreeneShareEnabled && (
-          <>
-            {isAudioEnabled ? (
-              <div className="cursor-pointer rounded-lg p-[0.5rem]">
-                <div
-                  className="flex flex-row justify-between border-[#FFFFFF] border-1 p-[0.5rem] rounded-full px-6"
-                  onClick={handleAudio}
-                >
-                  {isMicrophoneEnabled ? (
-                    <>
-                      <div className="mt-[0.2rem] mr-2">
-                        <OpenMicIcon size={{ width: 30, height: 30 }} />
-                      </div>
-                      <p className="text-[1.25rem] font-roboto">On</p>
-                    </>
-                  ) : (
-                    <>
-                      <div className="mt-[0.2rem] mr-2">
-                        <OffMicIcon size={{ width: 30, height: 30 }} />
-                      </div>
-                      <p className="text-[1.25rem] font-roboto">Off</p>
-                    </>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <div className="cursor-pointer rounded-lg p-[0.5rem]">
-                <div
-                  className="flex flex-row justify-between border-[#FFFFFF] border-1 p-[0.5rem] rounded-full px-6"
-                  onClick={handleHandRaise}
-                >
-                  <div className="mt-[0.2rem] mr-2">
-                    <OpenMicIcon size={{ width: 30, height: 30 }} />
-                  </div>
-                  <p className="text-[1.25rem] font-roboto">Request</p>
-                </div>
-              </div>
-            )}
-
-            <div className="cursor-pointer rounded-lg p-[0.5rem]">
-              <div
-                className="flex flex-row justify-between p-[0.5rem] rounded-full px-6"
-                style={{
-                  background:
-                    "linear-gradient(97deg, #A54FE7 0.07%, #3578EA 99.93%)",
-                }}
-                onClick={handleChatModal}
-              >
-                <div className="mt-[0.2rem] mr-2">
-                  <ChatIcon size={{ width: 30, height: 30 }} />
-                </div>
-                <p className="text-[1.25rem] font-roboto">Chat</p>
-              </div>
-            </div>
-          </>
-        )}
-
-        {isVideoEnabled && (
-          <div
-            className="cursor-pointer rounded-lg p-2 hover:bg-gray-500"
-            onClick={handleChatModal}
-          >
-            <ChatIcon size={{ width: 30, height: 30 }} />
-          </div>
-        )}
-      </div>
-
-      {isAudioEnabled && (isVideoEnabled || isScreeneShareEnabled) && (
-        <div
-          className="mt-[0.3rem] ml-[0.6rem] cursor-pointer rounded-lg p-2 hover:bg-gray-500"
-          onClick={handleAudio}
-        >
-          {isMicrophoneEnabled ? (
-            <OpenMicIcon size={{ width: 30, height: 30 }} />
-          ) : (
-            <OffMicIcon size={{ width: 30, height: 30 }} />
-          )}
+    <div className="fixed left-0 top-0 z-40 col-span-12 hidden h-full w-fit flex-col space-y-7 bg-white p-2 shadow-[0px_0px_4px_0px_rgba(0,0,0,0.25)] dark:bg-[#121212] dark:shadow-[0px_0px_4px_0px_rgba(255,255,255,0.25)] lg:flex">
+      {(isCurrentUserHost || isScreeneShareEnabled) && (
+        <div className="cursor-pointer rounded-lg p-2 hover:bg-gray-500">
+          <Image
+            src={gallery_dark}
+            alt="Whalesbook Logo"
+            width={23}
+            height={23}
+            onClick={handleImageUpload}
+          />
+        </div>
+      )}
+      {isVideoEnabled && (
+        <div className="cursor-pointer rounded-lg p-2 hover:bg-gray-500">
+          <Image
+            src={isCameraEnabled ? videoOn : videoOff}
+            alt="Whalesbook Logo"
+            className="cursor-pointer"
+            width={30}
+            height={30}
+            onClick={handleCamera}
+          />
         </div>
       )}
 
-      {isVideoEnabled && (
-        <div
-          className="mt-[0.3rem] ml-[0.6rem] cursor-pointer rounded-lg p-2 hover:bg-gray-500"
-          onClick={handleCamera}
-        >
-          {isCameraEnabled ? (
-            <VideoOnIcon size={{ width: 30, height: 30 }} />
-          ) : (
-            <VideoOffIcon size={{ width: 30, height: 30 }} />
-          )}
+      {isAudioEnabled && (
+        <div className="cursor-pointer rounded-lg p-2 hover:bg-gray-500">
+          <Image
+            src={isMicrophoneEnabled ? audioOn : audioOff}
+            className="cursor-pointer"
+            alt="Whalesbook Logo"
+            width={30}
+            height={30}
+            onClick={handleAudio}
+          />
+        </div>
+      )}
+
+      {!isCurrentUserHost && (
+        <div className="cursor-pointer rounded-lg p-2 hover:bg-gray-500">
+          <Image
+            src={handraiseImage}
+            alt="Whalesbook Logo"
+            className="cursor-pointer"
+            width={30}
+            height={30}
+            onClick={handleHandRaise}
+          />
         </div>
       )}
 
       {isScreeneShareEnabled && (
-        <div
-          className="mt-[0.3rem] ml-[0.6rem] cursor-pointer rounded-lg p-2 hover:bg-gray-500"
-          onClick={handleScreenShare}
-        >
-          <ScreenShareIcon size={{ width: 30, height: 30 }} />
-        </div>
-      )}
-
-      {(isCurrentUserHost || isScreeneShareEnabled) && (
-        <div
-          className="mt-[0.3rem] ml-[0.6rem] cursor-pointer rounded-lg p-2 hover:bg-gray-500"
-          onClick={handleImageUpload}
-        >
-          <ImageUploadIcon size={{ width: 30, height: 30 }} />
-        </div>
-      )}
-
-      {(isCurrentUserHost || isCurrentCoHost) && (
-        <div
-          className="mt-[0.5rem] ml-[0.6rem] cursor-pointer rounded-lg p-2 hover:bg-gray-500"
-          onClick={() => handleHandRaisedParticipantsDialogOpenChange(true)}
-        >
-          <HandraiseIcon size={{ width: 30, height: 30 }} />
-        </div>
-      )}
-
-      {/* {(isCurrentUserHost || isCurrentCoHost) && (
-        <div
-          className="mt-[0.5rem] ml-[2rem]"
-          onClick={() => handleBlockedUsersDialogOpenChange(true)}
-        >
-          <BlockedIcon size={{ width: 30, height: 30 }} />
-        </div>
-      )} */}
-
-      {isCurrentUserHost && (
-        <div
-          className="mt-[0.5rem] ml-[0.6rem] cursor-pointer rounded-lg p-2 hover:bg-gray-500"
-          onClick={() => {
-            handleEgress(true);
-          }}
-        >
-          <EgressIcon size={{ width: 30, height: 30 }} />
+        <div className="cursor-pointer rounded-lg p-2 hover:bg-gray-500">
+          <Image
+            src={screenshareImage}
+            alt="Whalesbook Logo"
+            width={30}
+            height={30}
+            className="cursor-pointer"
+            onClick={handleScreenShare}
+          />
         </div>
       )}
 
       {isCurrentUserHost && (
-        <div
-          className="mt-[0.5rem] ml-[0.6rem] cursor-pointer̃"
-          onClick={endRoom}>
-          <EndRoomIcon size={{ width: 30, height: 30 }} />
+        <div className="cursor-pointer rounded-lg p-2 hover:bg-gray-500">
+          <Image
+            src={handraiseImage}
+            alt="Whalesbook Logo"
+            width={30}
+            height={30}
+            className="cursor-pointer"
+            onClick={() => handleHandRaisedParticipantsDialogOpenChange(true)}
+          />
         </div>
       )}
+
+      {isCurrentUserHost && (
+        <div className="cursor-pointer rounded-lg p-2 hover:bg-gray-500">
+          <Image
+            src={blocked_users}
+            alt="Whalesbook Logo"
+            width={30}
+            height={30}
+            className="cursor-pointer"
+            onClick={() => handleBlockedUsersDialogOpenChange(true)}
+          />
+        </div>
+      )}
+
+      {isCurrentUserHost && (
+        <div className="cursor-pointer rounded-lg p-2 hover:bg-gray-500">
+          <Image
+            src={broadcastImage}
+            alt="Whalesbook Logo"
+            width={30}
+            height={30}
+            className="cursor-pointer"
+            onClick={() => {
+              handleEgress(true);
+            }}
+          />
+        </div>
+      )}
+
+      <div
+        className="!mt-auto cursor-pointer p-2"
+        onClick={() => {
+          endRoom();
+        }}
+      >
+        <Image
+          src={logout}
+          alt="Whalesbook Logo"
+          width={30}
+          height={30}
+          className="cursor-pointer"
+        />
+      </div>
     </div>
   );
 }

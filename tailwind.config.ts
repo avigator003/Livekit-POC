@@ -19,9 +19,6 @@ const config: Config = {
       padding: "2rem",
     },
     extend: {
-      fontFamily: {
-        roboto: ['Roboto', 'sans-serif'],
-      },
       screens: {
         xs: "475px",
         "1xl": "1440px",

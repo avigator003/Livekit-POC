@@ -9,10 +9,8 @@ import ImagePicker from "../RoomImagesPicker";
 import ShadowModal from "@/components/custom-ui/modal/ShadowModal";
 import DesktopRoomFooter from "./DesktopRoomFooter";
 import MobileRoomFooter from "./MobileRoomFooter";
-import useImagesStore from "@/store/room/useImagesStore";
 
 function RoomFooter() {
-  const { files } = useImagesStore();
   const roomStore = useRoomStore();
   const { isScreenShareEnabled } = useLocalParticipant();
 
@@ -22,7 +20,6 @@ function RoomFooter() {
   );
   const [egressDialogOpen, setEgressDialogOpen] = React.useState(false);
   const [imageUploadModal, setImageUploadModal] = React.useState(false);
-  const [imagesModalCounter, setModalImagesCounter] = React.useState(0);
 
   const [vw, setVw] = React.useState(window.innerWidth);
 
@@ -41,13 +38,6 @@ function RoomFooter() {
   const handleImageUpload = () => {
     setImageUploadModal(!imageUploadModal);
   };
-
-  useEffect(() => {
-    if (files.length === 0 && imagesModalCounter !== 0) {
-      handleImageUpload();
-    }
-    setModalImagesCounter(1);
-  }, [files]);
 
   useEffect(() => {
     roomStore.setIsScreenSharing(isScreenShareEnabled);
@@ -78,31 +68,30 @@ function RoomFooter() {
         isOpen={egressDialogOpen}
         onOpenChange={handleEgress}
       />
-      <div className="flex flex-row space-x-4 justify-center">
-        {vw > 1024 ? (
-          <DesktopRoomFooter
-            handleImageUpload={handleImageUpload}
-            handleBlockedUsersDialogOpenChange={
-              handleBlockedUsersDialogOpenChange
-            }
-            handleEgress={handleEgress}
-            handleHandRaisedParticipantsDialogOpenChange={
-              handleHandRaisedParticipantsDialogOpenChange
-            }
-          />
-        ) : (
-          <MobileRoomFooter
-            handleImageUpload={handleImageUpload}
-            handleBlockedUsersDialogOpenChange={
-              handleBlockedUsersDialogOpenChange
-            }
-            handleEgress={handleEgress}
-            handleHandRaisedParticipantsDialogOpenChange={
-              handleHandRaisedParticipantsDialogOpenChange
-            }
-          />
-        )}
-      </div>
+
+      {vw > 1024 ? (
+        <DesktopRoomFooter
+          handleImageUpload={handleImageUpload}
+          handleBlockedUsersDialogOpenChange={
+            handleBlockedUsersDialogOpenChange
+          }
+          handleEgress={handleEgress}
+          handleHandRaisedParticipantsDialogOpenChange={
+            handleHandRaisedParticipantsDialogOpenChange
+          }
+        />
+      ) : (
+        <MobileRoomFooter
+          handleImageUpload={handleImageUpload}
+          handleBlockedUsersDialogOpenChange={
+            handleBlockedUsersDialogOpenChange
+          }
+          handleEgress={handleEgress}
+          handleHandRaisedParticipantsDialogOpenChange={
+            handleHandRaisedParticipantsDialogOpenChange
+          }
+        />
+      )}
     </>
   );
 }

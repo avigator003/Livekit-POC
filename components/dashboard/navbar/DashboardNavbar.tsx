@@ -48,7 +48,6 @@ const DashboardNavbar: React.FC = () => {
 
   const handleLogout = () => {
     authStore.removeUser();
-    roomStore.removeRoom();
     router.push("/");
   };
 

@@ -146,7 +146,7 @@ const VerifyCode: React.FC = () => {
         profilePhoto: response.data.profile_photo,
       };
       authencationStore.addUser(user);
-      setupHeaderToken(authencationStore.user?.token || "");
+      setupHeaderToken();
       router.push(`/dashboard/rooms`);
       loginSignupStore.setIsSignupFlow(true);
       toast.success("Signed in successfully");

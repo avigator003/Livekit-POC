@@ -23,7 +23,7 @@ const useHandRaiseHandler = (): HandRaiseHandlerHook => {
       raised: true,
       username: user?.userName,
       name: user?.name,
-      profilePic: user?.profilePhoto,
+      profilePic: "",
       type: "handraise",
       identity: localParticipant?.identity,
       metadata: localParticipant?.metadata,

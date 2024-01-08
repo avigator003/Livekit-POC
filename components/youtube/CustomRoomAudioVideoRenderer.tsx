@@ -13,7 +13,7 @@ function CustomRoomAudioVideoRenderer() {
 
   return (
     <div>
-      {unmutedTracks.length > 0 ? (
+      {unmutedTracks?.length > 0 ? (
         <div className="relative mt-3 h-[976px] w-[1890px] lg:mt-0 -translate-x-10">
           <VideoTrack {...unmutedTracks[0]} className="h-[976px] w-[1890px]" />
           {unmutedTracks.length > 0 && (

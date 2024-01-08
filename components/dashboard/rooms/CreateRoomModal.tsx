@@ -54,7 +54,7 @@ const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
   const [thumbnailUploading, setThumbnailUploading] = useState<boolean>(false);
   const [isThumbnail, setIsThumbnail] = useState(false);
   const [isDescribeContent, setIsDescribeContent] = useState(false);
-  const [thumnailText, setThumnailText] = useState("");
+
   const roomStore = useRoomStore();
   const fileInputRef = useRef<any>(null);
   const {
@@ -87,9 +87,7 @@ const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
       const formData = new FormData();
       formData.append("file", selectedFile);
       try {
-        const result = await RoomFactory.getInstance().uploadRoomThumbnail(
-          formData
-        );
+        const result = await RoomFactory.getInstance().uploadRoomThumbnail(formData);
         setValue("thumbnail", result.url);
         setThumbnailUploading(false);
       } catch (error) {
@@ -103,7 +101,6 @@ const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
       roomName: data.roomName,
       description: data.description,
       thumbnail: data.thumbnail,
-      textThumbnail: thumnailText,
       is_private: data.privacy === "Social (Anyone can join)" ? false : true,
       roomType: "video",
       is_paid: false,
@@ -291,12 +288,10 @@ const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
                           />
                         </div>
                         <textarea
-                          value={thumnailText}
-                          onChange={(e) => setThumnailText(e.target.value)}
                           className="inset-0 z-20 flex w-full resize-none items-center justify-center bg-transparent bg-none px-2 text-center text-lg uppercase text-gray-900 outline-none scrollbar-hide dark:text-white"
                           placeholder="Room Name"
-                          rows={4}
-                          maxLength={150}
+                          rows={2}
+                          maxLength={79}
                         />
                       </div>
                     </div>

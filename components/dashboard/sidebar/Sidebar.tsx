@@ -9,13 +9,11 @@ import { cn } from "@/lib/utils";
 import useAuthenticationStore from "@/store/useAuthenticationStore";
 import SignOutIcon from "@/svgs/sidebar/signout";
 import { sidebarMenuItems } from "./SidebarMenuItems";
-import useRoomStore from "@/store/room/useRoomStore";
 
 const Sidebar: React.FC = () => {
   const pathname = usePathname();
   const { theme } = useTheme();
   const authStore = useAuthenticationStore();
-  const roomStore = useRoomStore();
   const router = useRouter();
 
   const isDark = theme === "dark";
@@ -23,7 +21,6 @@ const Sidebar: React.FC = () => {
 
   const handleLogout = () => {
     authStore.removeUser();
-    roomStore.removeRoom();
     router.push("/");
   };
 

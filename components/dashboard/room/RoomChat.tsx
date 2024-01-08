@@ -13,6 +13,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 function RoomChat() {
+  const [isChatMinimized, setIsChatMinimized] = useState(false);
+
   const chatStore = useChatStore();
   const chatMessages = useChatStore((state) => state.chatMessages);
   const authStore = useAuthenticationStore();
@@ -58,13 +60,13 @@ function RoomChat() {
         const encoder = new TextEncoder();
         localParticipant?.publishData(
           encoder.encode(strData),
-          DataPacket_Kind.RELIABLE
+          DataPacket_Kind.RELIABLE,
         );
       } else {
         toast.error("You don't have enough permission yet");
       }
     },
-    [localParticipant]
+    [localParticipant],
   );
 
   const sendMessage = () => {
@@ -101,25 +103,43 @@ function RoomChat() {
   return (
     <div
       className={cn(
-        "relative col-span-12 h-full rounded-[8px] bg-white px-3 transition-all duration-500 dark:bg-[#121212] lg:mb-0"
+        "col-span-12 mb-14 h-full rounded-[8px] bg-white px-3 transition-all duration-500 dark:bg-[#121212] lg:mb-0",
+        {
+          "-bottom-[26px] left-0 h-16 w-full rounded-b-none lg:absolute":
+            isChatMinimized,
+          "box_shadow lg:h-[calc(100vh-250px)]": !isChatMinimized,
+        },
       )}
     >
       <div className="flex w-full items-center justify-between">
         <p className="my-5 text-xl">Live Chat</p>
-        <button className="cursor-pointer">-</button>
+        <button
+          onClick={() => setIsChatMinimized(!isChatMinimized)}
+          className="cursor-pointer"
+        >
+          -
+        </button>
       </div>
 
-      <ScrollArea className={"h-[18rem] w-full"}>
+      <ScrollArea
+        className={cn("h-[18rem] w-full lg:h-[73%]", {
+          hidden: isChatMinimized,
+        })}
+      >
         {liveChatMesssages?.length === 0 ? (
-          <div className="flex w-full items-center justify-center mt-32">
-            <p className="text-lg">No Chat Messages</p>
+          <div className="flex w-full items-center justify-center">
+            <p className="text-sm">No Chat Messages</p>
           </div>
         ) : (
           avatars
         )}
       </ScrollArea>
 
-      <div className="absolute bottom-5 w-[94%]">
+      <div
+        className={cn("mb-2", {
+          invisible: isChatMinimized,
+        })}
+      >
         <div className="flex items-center gap-3">
           {/* <div className="w-full">
         <EmojiPicker />

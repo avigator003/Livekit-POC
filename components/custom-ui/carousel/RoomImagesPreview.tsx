@@ -1,34 +1,24 @@
 import useUnmutedTracks from "@/hooks/room/useUnmutedTracks";
 import useVideoPresenter from "@/hooks/room/useVideoPresenter";
-import useRoomStore, { ImageUrl } from "@/store/room/useRoomStore";
+import useRoomStore from "@/store/room/useRoomStore";
 import { VideoTrack } from "@livekit/components-react";
 import { Carousel, Typography } from "@material-tailwind/react";
 import { Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ShadowModal from "../modal/ShadowModal";
 import UploadedImagesModal from "@/components/dashboard/room/modal/UploadedImagesModal";
 import useImagesStore from "@/store/room/useImagesStore";
+import { Button } from "@nextui-org/button";
 import { useCurrentCoHost, useCurrentHost } from "@/hooks/room/useCurrentHost";
-import useAuthenticationStore from "@/store/useAuthenticationStore";
-import { RemoteTrack, Track, VideoQuality } from "livekit-client";
 
 export function RoomImagesPreview() {
-  const {
-    uploadedImages,
-  } = useRoomStore();
-  const {
-    setSelectedImageIndex,
-    removeSelectedImageIndex,
-    isImageDeleted,
-  } = useImagesStore();
-
-  const { user } = useAuthenticationStore();
-
-  const unmutedTracks:  Track[] = useUnmutedTracks() || [];
+  const { uploadedImages } = useRoomStore();
+  const { setSelectedImageIndex, removeSelectedImageIndex } = useImagesStore();
+  const unmutedTracks: any = useUnmutedTracks();
   const videoPresenter = useVideoPresenter();
-  const [showUploadedImageModal, setUploadedImagesModal] = useState<boolean>(
-    false
-  );
+  const [showUploadedImageModal, setUploadedImagesModal] =
+    useState<boolean>(false);
+
   const handleShowUploadedImagesModal = () => {
     setUploadedImagesModal(!showUploadedImageModal);
   };
@@ -39,15 +29,9 @@ export function RoomImagesPreview() {
     setSelectedImageIndex(index);
   };
 
-  useEffect(() => {
-    if (isImageDeleted) {
-      handleShowUploadedImagesModal();
-    }
-  }, [isImageDeleted]);
-
   const isCohost = useCurrentCoHost();
   const isHost = useCurrentHost();
-  
+
   return (
     <div className="aspect-[16/9] rounded-xl">
       <ShadowModal
@@ -55,20 +39,22 @@ export function RoomImagesPreview() {
         isOpen={showUploadedImageModal}
         onClose={handleShowUploadedImagesModal}
       />
-      <Carousel transition={{ duration: 1 }} className="rounded-xl"
-            navigation={({ setActiveIndex, activeIndex, length }) => (
-              <div className="absolute bottom-4 left-2/4 flex -translate-x-2/4 gap-2">
-                {new Array(length).fill("").map((_, i) => (
-                  <span
-                    key={i}
-                    className={`block h-1 cursor-pointer rounded-lg transition-all content-[''] ${
-                      activeIndex === i ? "w-3 h-3 bg-white" : "w-3 h-3 bg-white/50"
-                    }`}
-                    onClick={() => setActiveIndex(i)}
-                  />
-                ))}
-              </div>
-            )}>
+      <Carousel
+        className="aspect-[16/9] h-full w-full rounded-xl"
+        navigation={({ setActiveIndex, activeIndex, length }) => (
+          <div className="absolute bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2">
+            {new Array(length).fill("").map((_, i) => (
+              <span
+                key={i}
+                className={`block h-1 cursor-pointer rounded-2xl transition-all content-[''] ${
+                  activeIndex === i ? "w-8 bg-white" : "w-4 bg-white/50"
+                }`}
+                onClick={() => setActiveIndex(i)}
+              />
+            ))}
+          </div>
+        )}
+      >
         {unmutedTracks?.length > 0 ? (
           <div className="relative aspect-[16/9] w-full">
             <VideoTrack
@@ -100,15 +86,16 @@ export function RoomImagesPreview() {
             </div>
           </div>
         )}
-        {uploadedImages?.map((imageUrl: ImageUrl, index: number) => {
+        {uploadedImages?.map((imageUrl: string, index: number) => {
           return (
-            <div key={imageUrl.url} className="relative aspect-[16/9] w-full">
+            <div key={imageUrl} className="relative aspect-[16/9] w-full">
               <img
-                src={imageUrl.url}
+                src={imageUrl}
                 className="block aspect-[16/9] h-full w-full rounded-lg"
               />
               <div className="absolute bottom-0 left-0 aspect-[16/9] h-full w-full bg-black opacity-20"></div>
-              {(isCohost || isHost || imageUrl.userId === user?.id) && (
+
+              {(isCohost || isHost) && (
                 <div className="absolute right-5 top-5 cursor-pointer">
                   <div className="mx-auto mb-4 w-3/4 md:w-2/4">
                     <Trash2
